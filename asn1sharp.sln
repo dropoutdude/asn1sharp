@@ -7,6 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asn1sharp", "asn1sharp\asn1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asn1sharp.Test", "asn1sharp.Test\asn1sharp.Test.csproj", "{6CCFF7FC-3950-4F1D-8662-667E662BB22A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{745B0E4F-C8D6-4346-B715-269BA777F8E5}"
+	ProjectSection(SolutionItems) = preProject
+		.travis.yml = .travis.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

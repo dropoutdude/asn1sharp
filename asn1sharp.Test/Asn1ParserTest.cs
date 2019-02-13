@@ -8,7 +8,7 @@ namespace asn1sharp.Test
 		[Fact]
 		public void ParseRsaKeyPair_ExpectSpecificStructure()
 		{
-			using (var file = File.Open("TestData\\rsakey1.pem", FileMode.Open))
+			using (var file = File.Open(Path.Combine("TestData", "rsakey1.pem"), FileMode.Open))
 			{
 				var base64 = PemReader.ReadPem(file);
 
@@ -19,7 +19,7 @@ namespace asn1sharp.Test
 		[Fact]
 		public void ParseEccKeyPair_ExpectSpecificStructure()
 		{
-			using (var file = File.Open("TestData\\bp384-key1.pem", FileMode.Open))
+			using (var file = File.Open(Path.Combine("TestData", "bp384-key1.pem"), FileMode.Open))
 			{
 				var base64 = PemReader.ReadPem(file);
 
