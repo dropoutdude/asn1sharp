@@ -1,11 +1,16 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace asn1sharp
 {
-	public sealed class Parser
+	public static class Parser
 	{
-		public Parser(Stream stream)
+		public static Node Parse(this Stream stream)
 		{
+			using (var reader = new StreamReader(stream))
+			{
+				throw new NotImplementedException();
+			}
 		}
 	}
 }
