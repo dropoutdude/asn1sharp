@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace asn1sharp
 {
@@ -6,7 +7,10 @@ namespace asn1sharp
 	{
 		public static Node Parse(this byte[] bytes)
 		{
-			throw new NotImplementedException();
+			using (var stream = new MemoryStream(bytes))
+			{
+				return stream.Parse();
+			}
 		}
 
 		public static Node Parse(this string base64Values)

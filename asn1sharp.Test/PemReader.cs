@@ -5,6 +5,14 @@ namespace asn1sharp.Test
 {
 	internal class PemReader
 	{
+		public static string ReadPem(string path)
+		{
+			using (var file = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+			{
+				return ReadPem(file);
+			}
+		}
+
 		public static string ReadPem(Stream stream)
 		{
 			var builder = new StringBuilder();

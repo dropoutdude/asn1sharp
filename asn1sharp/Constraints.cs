@@ -1,16 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace asn1sharp
 {
-	public static class Constraints
+	internal static class Constraints
 	{
-		public static T Require<T>(this T value, Predicate<T> predicate)
+		public static T RequireNotNull<T>(this T value, string name)
+			where T : class
+		{
+			if (value is null)
+			{
+				throw new ArgumentNullException(name);
+			}
+
+			return value;
+		}
+
+		public static T Require<T>(this T value, Predicate<T> predicate, string message = "")
 		{
 			if (!predicate(value))
 			{
-				throw new ArgumentException("Given parameter does not fulfill required conditions!");
+				var exceptionMessage = "Given parameter does not fulfill required conditions!" +
+										$"{Environment.NewLine}\tCause: {message}";
+
+				throw new ArgumentException(exceptionMessage);
 			}
 
 			return value;
