@@ -14,17 +14,17 @@ namespace asn1sharp.Test
 
 			var bytes = Convert.FromBase64String(base64);
 
-			var outerDescription = NodeDescription.From(bytes);
+			var outerDescription = NodeDescriptionHeader.From(bytes);
 
-			var offset = outerDescription.ValueOffset;
+			var offset = outerDescription.HeaderSize;
 
-			var firstInnerDescription = NodeDescription.From(bytes.Skip(offset).ToArray());
+			var firstInnerDescription = NodeDescriptionHeader.From(bytes.Skip(offset).ToArray());
 
-			Assert.Equal(2, outerDescription.LengthData.Length);
+			Assert.Equal(1213, outerDescription.DataLength);
 			Assert.Equal(4, offset);
 
-			Assert.Single(firstInnerDescription.LengthData);
-			Assert.Equal(2, firstInnerDescription.ValueOffset);
+			Assert.Equal(1, firstInnerDescription.DataLength);
+			Assert.Equal(2, firstInnerDescription.HeaderSize);
 		}
 
 		[Fact]
@@ -34,18 +34,18 @@ namespace asn1sharp.Test
 
 			var bytes = Convert.FromBase64String(base64);
 
-			var outerDescription = NodeDescription.From(bytes);
+			var outerDescription = NodeDescriptionHeader.From(bytes);
 
-			var offset = outerDescription.ValueOffset;
+			var offset = outerDescription.HeaderSize;
 
-			var firstInnerDescription = NodeDescription.From(bytes.Skip(offset).ToArray());
+			var firstInnerDescription = NodeDescriptionHeader.From(bytes.Skip(offset).ToArray());
 
-			Assert.Single(outerDescription.LengthData);
-			Assert.True(outerDescription.Length() > 127);
+			Assert.Equal(168, outerDescription.DataLength);
+			Assert.True(outerDescription.DataLength > 127);
 			Assert.Equal(3, offset);
 
-			Assert.Single(firstInnerDescription.LengthData);
-			Assert.Equal(2, firstInnerDescription.ValueOffset);
+			Assert.Equal(1, firstInnerDescription.DataLength);
+			Assert.Equal(2, firstInnerDescription.HeaderSize);
 		}
 	}
 }
