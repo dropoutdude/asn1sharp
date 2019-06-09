@@ -3,99 +3,136 @@ using System.Linq;
 
 namespace asn1sharp
 {
-	internal sealed class NodeDescriptionHeader
-	{
-		#region Fields
+    internal sealed class NodeDescriptionHeader
+    {
+        #region Fields
 
-		private const int MinimumLength = 3;
+        private const int MinimumLength = 2;
 
-		private const int MinimumHeaderSize = 2;
+        private const int MinimumHeaderSize = 2;
 
-		#endregion
+        #endregion
 
-		#region Constructor
+        #region Constructor
 
-		private NodeDescriptionHeader(byte tag, long length, int headerSize)
-		{
-			Tag = tag;
+        private NodeDescriptionHeader(byte tag, long length, int headerSize)
+        {
+            Tag = tag;
 
-			DataLength = length.Require(l => l >= 0, "Data length value must be positive!");
+            DataLength = length.Require(l => l >= 0, "Data length value must be positive!");
 
-			HeaderSize = headerSize.Require(o => o >= MinimumHeaderSize, $"{nameof(headerSize)} must be greater than {MinimumHeaderSize}!");
-		}
+            HeaderSize = headerSize.Require(o => o >= MinimumHeaderSize, $"{nameof(headerSize)} must be greater than {MinimumHeaderSize}!");
+        }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		public byte Tag { get; }
+        public byte Tag { get; }
 
-		public int HeaderSize { get; }
+        public int HeaderSize { get; }
 
-		public long DataLength { get; }
+        public long DataLength { get; }
 
         public long NodeLength => DataLength + HeaderSize;
 
-		#endregion
+        #endregion
 
-		#region Methods
+        #region Methods
 
-		public bool IsConstructed()
-		{
-			return Tag.IsConstructed();
-		}
+        public bool IsConstructed()
+        {
+            return Tag.IsConstructed();
+        }
 
-		private static long LengthValue(byte[] lengthData)
-		{
-			if (lengthData.Length <= 4)
-			{
-				var intValue = lengthData.Reverse().Concat(Enumerable.Repeat(byte.MinValue, sizeof(long) - lengthData.Length)).ToArray();
+        public static NodeDescriptionHeader From(byte[] bytes)
+        {
+            bytes.Require(b => b.Length >= MinimumLength, "Too little data provided for reading ASN.1!");
 
-				return BitConverter.ToInt64(intValue, 0);
-			}
+            if(!TryCreateFrom(bytes, out var header, out var message))
+            {
+                throw new ArgumentException(message);
+            }
 
-			throw new InvalidOperationException("Can only handle Data of size less than 2^63 bytes");
-		}
+            return header;
+        }
 
-		public static NodeDescriptionHeader From(byte[] bytes)
-		{
-			bytes.Require(b => b.Length > MinimumLength, "Too little data provided for reading ASN.1!");
+        public static bool TryCreateFrom(byte[] bytes, out NodeDescriptionHeader header)
+        {
+            header = null;
 
-			var tag = ReadTag(bytes);
+            if (bytes.Length >= MinimumLength)
+            {
+                TryCreateFrom(bytes, out header, out _);
+            }
 
-			var (lengthData, lengthSize) = ReadLength(bytes.Skip(1).ToArray());
+            return header != null;
+        }
 
-			var length = LengthValue(lengthData);
-            
-            // Increase lengthSize by one to account for the tag byte
-			return new NodeDescriptionHeader(tag, length, lengthSize + 1);
-		}
+        private static bool TryCreateFrom(byte[] bytes, out NodeDescriptionHeader header, out string message)
+        {
+            message = string.Empty;
 
-		private static byte ReadTag(byte[] bytes)
-		{
-			return bytes[0];
-		}
+            var tag = ReadTag(bytes);
 
-		private static (byte[], int) ReadLength(byte[] bytes)
-		{
-			bytes.Require(b => b.Length > 0, "Too little data provided for reading ASN.1!");
+            var (lengthData, lengthSize) = ReadLength(bytes.Skip(1).ToArray());
 
-			var offset = 1;
+            if (lengthData.Length > sizeof(long))
+            {
+                header = null;
 
-			var isLong = (bytes[0] >> 7 & 0x01) == 1;
+                message = "Can only handle Data of size less than 2^63 bytes";
+            }
+            else
+            {
+                var length = LengthValue(lengthData);
 
-			var length = (bytes[0] & 0x7F);
+                // Increase lengthSize by one to account for the tag byte
+                var headerLenght = lengthSize + 1;
 
-			if (isLong && length > 0)
-			{
-				offset += length;
+                header = new NodeDescriptionHeader(tag, length, headerLenght);
+            }
 
-				return (bytes.Skip(1).Take(length).ToArray(), offset);
-			}
+            return header != null;
+        }
 
-			return (bytes.Take(1).ToArray(), offset);
-		}
+        private static long LengthValue(byte[] lengthData)
+        {
+            var longValue = lengthData.Reverse().Concat(Enumerable.Repeat(byte.MinValue, sizeof(long) - lengthData.Length)).ToArray();
 
-		#endregion
-	}
+            return BitConverter.ToInt64(longValue, 0);
+        }
+
+        private static byte ReadTag(byte[] bytes)
+        {
+            return bytes[0];
+        }
+
+        private static (byte[], int) ReadLength(byte[] bytes)
+        {
+            if (bytes.Length > 0)
+            {
+                var offset = 1;
+
+                var isLong = (bytes[0] >> 7 & 0x01) == 1;
+
+                var length = (bytes[0] & 0x7F);
+
+                if (isLong && length > 0)
+                {
+                    offset += length;
+
+                    return (bytes.Skip(1).Take(length).ToArray(), offset);
+                }
+
+                return (bytes.Take(1).ToArray(), offset);
+            }
+            else
+            {
+                return (bytes, 1);
+            }
+        }
+
+        #endregion
+    }
 }

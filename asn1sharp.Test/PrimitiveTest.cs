@@ -24,10 +24,10 @@ namespace asn1sharp.Test
 		[Fact]
 		public void ParseNodeType_ExpectValidEquality()
 		{
-			var integer = NodeType.From(0b0000_0010);
-			var octetString = NodeType.From(0b0000_0100);
-			var sequence = NodeType.From(0b0001_0000);
-			var set = NodeType.From(0b0001_0001);
+			var integer = NodeType.Universal(0b0000_0010);
+			var octetString = NodeType.Universal(0b0000_0100);
+			var sequence = NodeType.Universal(0b0001_0000);
+			var set = NodeType.Universal(0b0001_0001);
 
 			Assert.Equal(NodeType.Integer, integer);
 			Assert.NotEqual(NodeType.PrintableString, octetString);

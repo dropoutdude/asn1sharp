@@ -1,28 +1,41 @@
 ﻿namespace asn1sharp
 {
-	public sealed class Tag
-	{
-		#region Constructor
+    public sealed class Tag
+    {
+        #region Constructor
 
-		public Tag(byte value)
-		{
-			Class = value.Class();
+        public Tag(byte value)
+        {
+            Class = value.Class();
 
-			Type = value.Type();
+            Type = value.Type(Class);
 
-			IsConstructed = value.IsConstructed();
-		}
+            IsConstructed = value.IsConstructed();
+        }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		public NodeClass Class { get; }
+        public NodeClass Class { get; }
 
-		public NodeType Type { get; }
+        public NodeType Type { get; }
 
-		public bool IsConstructed { get; }
+        public bool IsConstructed { get; }
 
-		#endregion
-	}
+        #endregion
+
+        #region Methods
+
+        public bool CanHaveChildren()
+        {
+            return Type == NodeType.BitString
+                || Type == NodeType.OctetString
+                || Type == NodeType.Set
+                || Type == NodeType.Sequence;
+
+        }
+
+        #endregion
+    }
 }

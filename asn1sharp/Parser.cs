@@ -1,47 +1,39 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace asn1sharp
 {
-	public static class Parser
-	{
-		public static async Task<Node> Parse(this Stream stream)
-		{
-			var description = await Description(stream);
+    public static class Parser
+    {
+        public static async Task<Node> Parse(this Stream stream)
+        {
+            var description = await Description(stream);
 
-            var children = description.Inner();
+            description.Require(d => d.IsConstructed, "Invalid root node!");
 
-			throw new NotImplementedException();
-		}
+            return Node.From(description);
+        }
 
-		private static async Task<NodeDescription> Description(Stream stream)
-		{
-			var buffer = new byte[1024];
+        private static async Task<NodeDescription> Description(Stream stream)
+        {
+            var read = -1;
 
-			var read = await stream.ReadAsync(buffer, 0, buffer.Length);
+            var buffers = new List<byte[]>();
 
-			var first = NodeDescriptionHeader.From(buffer);
+            while (read != 0)
+            {
+                var buffer = new byte[1024];
 
-			var data = BuildData(buffer, (int)first.DataLength, first.HeaderSize, read - first.HeaderSize);
+                read = await stream.ReadAsync(buffer, 0, buffer.Length);
 
-			var left = (int)first.NodeLength - read;
+                buffers.Add(buffer);
+            }
 
-			if (left > 0)
-			{
-				await stream.ReadAsync(data, read, left);
-			}
+            var result = new StreamedResult(buffers);
 
-			return new NodeDescription(first, data);
-		}
-
-		private static byte[] BuildData(byte[] buffer, int length, int offset, int read)
-		{
-			var data = new byte[length];
-
-			Array.Copy(buffer, offset, data, 0, read);
-
-			return data;
-		}
-	}
+            return result.AsDescription();
+        }
+    }
 }
