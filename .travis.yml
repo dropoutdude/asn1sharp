@@ -9,4 +9,6 @@ install:
 script:
   - dotnet build -c Release
   - dotnet test -c Release ./asn1sharp.Test/asn1sharp.Test.csproj
-  - dotnet pack -c Release
+
+after_success:
+  - bash deploy.sh $TRAVIS_BRANCH $TRAVIS_BUILD_NUMBER $NUGET_ASN1_KEY $TRAVIS_TAG

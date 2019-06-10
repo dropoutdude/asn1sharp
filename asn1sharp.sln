@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.329
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29001.49
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asn1sharp", "asn1sharp\asn1sharp.csproj", "{96DB2A3F-EEAE-4426-B411-EB6EC57090CC}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{745B0E4F-C8D6-4346-B715-269BA777F8E5}"
 	ProjectSection(SolutionItems) = preProject
 		.travis.yml = .travis.yml
+		deploy.sh = deploy.sh
+		Version.txt = Version.txt
 	EndProjectSection
 EndProject
 Global
