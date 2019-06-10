@@ -11,7 +11,7 @@ if [ $branch == "master" ] || [ -n "$tag" ]; then
     echo "Tag $tag has wrong format - exiting! Expected v$version"
     exit 1;
   fi
-  if [ $branch == "deployscript" ]; then      
+  if [ $branch == "master" ]; then      
     version=$(printf "%s-p%s" $version "$build");
     printf "Prerelease Version equals %s\n" $version;
   fi
