@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Copyright>dropoutdude</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/dropoutdude/asn1sharp.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/dropoutdude/asn1sharp</PackageProjectUrl>
+    <Description>.Net library for parsing ASN.1 binary code</Description>
   </PropertyGroup>
 
 </Project>
