@@ -7,30 +7,27 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="TestData\bp384-key1.pem" />
-    <None Remove="TestData\rsakey1.pem" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="TestData\bp384-key1.pem">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\rsakey1.pem">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\asn1sharp.Test\asn1sharp.Test.csproj" />
+    <ProjectReference Include="..\asn1sharp.visual\asn1sharp.visual.csproj" />
     <ProjectReference Include="..\asn1sharp\asn1sharp.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TestData\bp384-key1.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\rsakey1.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

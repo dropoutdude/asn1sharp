@@ -7,9 +7,11 @@ namespace asn1sharp
     {
         #region Constructor
 
-        private Node(Tag tag, IEnumerable<Node> children)
+        private Node(Tag tag, Sizes sizes, IEnumerable<Node> children)
         {
             Tag = tag.RequireNotNull(nameof(tag));
+
+            Sizes = sizes.RequireNotNull(nameof(sizes));
 
             Children = children.RequireNotNull(nameof(children));
         }
@@ -19,6 +21,8 @@ namespace asn1sharp
         #region Properties
 
         public Tag Tag { get; }
+
+        public Sizes Sizes { get; }
 
         public IEnumerable<Node> Children { get; }
 
@@ -38,7 +42,7 @@ namespace asn1sharp
                                              .Select(c => From(c)));
             }
 
-            return new Node(tag, children);
+            return new Node(tag, Sizes.From(description), children);
         }
 
         #endregion
