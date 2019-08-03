@@ -4,21 +4,26 @@ using System.Threading.Tasks;
 
 namespace asn1sharp
 {
-	public static class Asn1Sharp
-	{
-		public static async Task<Node> Parse(this byte[] bytes)
-		{
-			using (var stream = new MemoryStream(bytes))
-			{
-				return await stream.Parse();
-			}
-		}
+    public static class Asn1Sharp
+    {
+        public static async Task<Node> Parse(this byte[] bytes)
+        {
+            using (var stream = new MemoryStream(bytes))
+            {
+                return await stream.Parse();
+            }
+        }
 
-		public static async Task<Node> Parse(this string base64Values)
-		{
-			var bytes = Convert.FromBase64String(base64Values);
+        public static Task<Node> Parse(this FileStream stream)
+        {
+            var adapter = new StreamAdapter(stream);
 
-			return await bytes.Parse();
-		}
-	}
+            return adapter.Parse().ContinueWith(t =>
+            {
+                adapter.Dispose();
+
+                return t.Result;
+            });
+        }
+    }
 }

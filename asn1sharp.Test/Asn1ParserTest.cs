@@ -10,29 +10,31 @@ namespace asn1sharp.Test
         [Fact]
         public async Task ParseRsaKeyPair_ExpectSpecificStructure()
         {
-            var base64 = PemReader.ReadPem(Path.Combine("TestData", "rsakey1.pem"));
+            using (var file = File.OpenRead(Path.Combine("TestData", "rsakey1.pem")))
+            {
+                var node = await file.Parse();
 
-            var node = await base64.Parse();
+                var children = node.Children;
 
-            var children = node.Children;
+                var grandChildren = children.SelectMany(c => c.Children);
 
-            var grandChildren = children.SelectMany(c => c.Children);
+                var key = grandChildren.Last();
 
-            var key = grandChildren.Last();
+                Assert.Equal(3, children.Count());
 
-            Assert.Equal(3, children.Count());
+                Assert.Equal(3, grandChildren.Count());
 
-            Assert.Equal(3, grandChildren.Count());
-
-            Assert.Equal(9, key.Children.Count());
+                Assert.Equal(9, key.Children.Count());
+            }
         }
 
         [Fact]
         public async Task ParseEccKeyPair_ExpectSpecificStructure()
         {
-            var base64 = PemReader.ReadPem(Path.Combine("TestData", "bp384-key1.pem"));
-
-            var node = await base64.Parse();
+            using (var file = File.OpenRead(Path.Combine("TestData", "bp384-key1.pem")))
+            {
+                var node = await file.Parse();
+            }
         }
     }
 }

@@ -11,9 +11,7 @@ namespace asn1sharp.visual.Test
         [Fact]
         public async Task PrettyPrint_EccKey_ExpectSpecificLines()
         {
-            var base64 = PemReader.ReadPem(Path.Combine("TestData", "bp384-key1.pem"));
-
-            var asn1node = await base64.Parse();
+            var asn1node = await ReadPemFile("bp384-key1.pem");
 
             var printed = asn1node.Print();
         }
@@ -21,11 +19,17 @@ namespace asn1sharp.visual.Test
         [Fact]
         public async Task PrettyPrint_RsaKey_ExpectSpecificLines()
         {
-            var base64 = PemReader.ReadPem(Path.Combine("TestData", "rsakey1.pem"));
-
-            var asn1node = await base64.Parse();
+            var asn1node = await ReadPemFile("rsakey1.pem");
 
             var printed = asn1node.Print();
+        }
+
+        private async Task<Node> ReadPemFile(string fileName)
+        {
+            using (var file = File.OpenRead(Path.Combine("TestData", fileName)))
+            {
+                return await file.Parse();
+            }
         }
     }
 }
