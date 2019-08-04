@@ -9,16 +9,16 @@ namespace asn1sharp
     {
         #region Fields
 
-        private readonly List<byte[]> _Buffers;
+        private readonly ReaderChunk _Chunk;
 
         #endregion
 
         #region Constructor
 
-        public StreamedResult(List<byte[]> buffers)
+        public StreamedResult(ReaderChunk chunk)
         {
-            _Buffers = buffers.RequireNotNull(nameof(buffers))
-                              .Require(b => b.Any());
+            _Chunk = chunk.RequireNotNull(nameof(chunk))
+                              .Require(c => c.Length > 0);
         }
 
         #endregion
@@ -27,17 +27,13 @@ namespace asn1sharp
 
         public NodeDescription AsDescription()
         {
-            var length = _Buffers.Aggregate(0, (l, b) => l + b.Length);
+            var length = _Chunk.Length;
 
             var data = new byte[length];
 
-            var offset = 0;
-
-            foreach (var buffer in _Buffers)
+            if (!_Chunk.TryRead(data))
             {
-                Array.Copy(buffer, 0, data, offset, buffer.Length);
-
-                offset += buffer.Length;
+                throw new InvalidOperationException("Chunk size not valid!");
             }
 
             return NodeDescription.From(data);

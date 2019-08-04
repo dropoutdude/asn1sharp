@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -17,10 +16,10 @@ namespace asn1sharp.Test
 
             using (var file = File.OpenRead(path))
             {
-                var actualNode = await file.Parse();
+                var actualNode = await file.ParsePem();
 
                 var bytesExpected = Convert.FromBase64String(PemReader.ReadPem(path));
-                var expectedNode = await bytesExpected.Parse();
+                var expectedNode = await bytesExpected.ParseBinary();
 
                 var actual = ReadNode(actualNode);
                 var expected = ReadNode(expectedNode);

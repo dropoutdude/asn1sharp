@@ -1,5 +1,3 @@
-using asn1sharp.Test;
-using System;
 using System.IO;
 using System.Threading.Tasks;
 using Xunit;
@@ -28,7 +26,7 @@ namespace asn1sharp.visual.Test
         {
             using (var file = File.OpenRead(Path.Combine("TestData", fileName)))
             {
-                return await file.Parse();
+                return await file.ParsePem();
             }
         }
     }
