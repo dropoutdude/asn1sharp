@@ -2,7 +2,8 @@ name: .NET
 
 on:
   push:
-    branches: [ master ]
+    tags:
+      - 'v*.*.*'
 
 jobs:
   build:
@@ -27,5 +28,7 @@ jobs:
       run: dotnet test -c Release --no-build --verbosity normal -f net5.0
     - name: Test using .net standard 2.0
       run: dotnet test -c Release --no-build --verbosity normal -f netcoreapp3.1
+    - name: Get the version
+      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
     - name: publish on version change
-      run: bash ./deploy.sh "master" ${{github.run_number}} ${{secrets.NUGET_API_KEY}}     
+      run: bash ./deploy.sh "master" ${{github.run_number}} ${{secrets.NUGET_API_KEY}} ${{ steps.vars.outputs.VERSION }}

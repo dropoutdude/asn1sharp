@@ -9,14 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asn1sharp.Test", "asn1sharp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{745B0E4F-C8D6-4346-B715-269BA777F8E5}"
 	ProjectSection(SolutionItems) = preProject
-		.travis.yml = .travis.yml
 		deploy.sh = deploy.sh
 		Version.txt = Version.txt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asn1sharp.visual", "asn1sharp.visual\asn1sharp.visual.csproj", "{ABB23A7C-495A-445F-B889-2903AA30ABD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asn1sharp.visual.Test", "asn1sharp.visual.Test\asn1sharp.visual.Test.csproj", "{A69D81DB-D2D9-4306-B310-EEEC7C6CA852}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asn1sharp.visual.Test", "asn1sharp.visual.Test\asn1sharp.visual.Test.csproj", "{A69D81DB-D2D9-4306-B310-EEEC7C6CA852}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
