@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,12 +9,31 @@ namespace asn1sharp.Test
     public class Asn1ParserTest
     {
         [Fact]
-        public async Task ParseRsaKeyPair_ExpectSpecificStructure()
+        public async Task ParsePemRsaKeyPair_ExpectSpecificStructure()
         {
-            var base64 = PemReader.ReadPem(Path.Combine("TestData", "rsakey1.pem"));
+            using (var file = File.OpenRead(Path.Combine("TestData", "rsakey1.pem")))
+            {
+                var node = await file.ParsePem();
 
-            var node = await base64.Parse();
+                AssertNode(node);
+            }
+        }
 
+        [Fact]
+        public async Task ParseBinaryRsaKeyPair_ExpectSpecificStructure()
+        {
+            using (var file = File.OpenRead(Path.Combine("TestData", "rsakey1.pem")))
+            {
+                var bytes = Convert.FromBase64String(PemReader.ReadPem(file));
+
+                var node = await bytes.ParseBinary();
+
+                AssertNode(node);
+            }
+        }
+
+        private void AssertNode(Node node)
+        {
             var children = node.Children;
 
             var grandChildren = children.SelectMany(c => c.Children);
@@ -30,9 +50,10 @@ namespace asn1sharp.Test
         [Fact]
         public async Task ParseEccKeyPair_ExpectSpecificStructure()
         {
-            var base64 = PemReader.ReadPem(Path.Combine("TestData", "bp384-key1.pem"));
-
-            var node = await base64.Parse();
+            using (var file = File.OpenRead(Path.Combine("TestData", "bp384-key1.pem")))
+            {
+                var node = await file.ParsePem();
+            }
         }
     }
 }

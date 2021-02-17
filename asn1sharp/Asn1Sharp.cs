@@ -1,24 +1,26 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 
 namespace asn1sharp
 {
-	public static class Asn1Sharp
-	{
-		public static async Task<Node> Parse(this byte[] bytes)
-		{
-			using (var stream = new MemoryStream(bytes))
-			{
-				return await stream.Parse();
-			}
-		}
+    public static class Asn1Sharp
+    {
+        public static async Task<Node> ParseBinary(this byte[] bytes)
+        {
+            using (var stream = new MemoryStream(bytes))
+            {
+                var source = new BinarySource(stream);
 
-		public static async Task<Node> Parse(this string base64Values)
-		{
-			var bytes = Convert.FromBase64String(base64Values);
+                return await source.Parse().ConfigureAwait(false);
+            }
+        }
 
-			return await bytes.Parse();
-		}
-	}
+        public static async Task<Node> ParsePem(this Stream stream)
+        {
+            using (var source = new PemSource(stream))
+            {
+                return await source.Parse().ConfigureAwait(false);
+            }
+        }
+    }
 }

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace asn1sharp.Test
 {
-	internal class PemReader
+	public sealed class PemReader
 	{
 		public static string ReadPem(string path)
 		{
