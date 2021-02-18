@@ -1,4 +1,4 @@
-https://github.com/dropoutdude/asn1sharp/workflows/master/badge.svg
+![master](https://github.com/dropoutdude/asn1sharp/workflows/master/badge.svg)
 # asn1sharp
 .Net library for parsing ASN.1 binary code with a simple interface for usage
 
