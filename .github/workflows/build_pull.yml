@@ -1,4 +1,4 @@
-name: .NET
+name: pulls
 
 on:
   pull_request:
