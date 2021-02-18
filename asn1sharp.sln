@@ -9,13 +9,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asn1sharp.Test", "asn1sharp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{745B0E4F-C8D6-4346-B715-269BA777F8E5}"
 	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
+		.github\workflows\build_pull.yml = .github\workflows\build_pull.yml
 		deploy.sh = deploy.sh
+		.github\workflows\publish.yml = .github\workflows\publish.yml
 		Version.txt = Version.txt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asn1sharp.visual", "asn1sharp.visual\asn1sharp.visual.csproj", "{ABB23A7C-495A-445F-B889-2903AA30ABD1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asn1sharp.visual.Test", "asn1sharp.visual.Test\asn1sharp.visual.Test.csproj", "{A69D81DB-D2D9-4306-B310-EEEC7C6CA852}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{50B48EF7-FFF8-4B89-A3F8-41FD9593DA49}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

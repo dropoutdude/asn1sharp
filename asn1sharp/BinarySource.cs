@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace asn1sharp
@@ -29,7 +30,7 @@ namespace asn1sharp
             return _ReadBytes != 0;
         }
 
-        protected override async Task<ReaderChunk> OnNextChunk()
+        protected override async Task<ReaderChunk> OnNextChunk(CancellationToken token)
         {
             var chunk = ReaderChunk.Empty;
 
@@ -37,7 +38,7 @@ namespace asn1sharp
             {
                 var buffer = new byte[ChunkSize];
 
-                _ReadBytes = await Stream.ReadAsync(buffer, 0, buffer.Length)
+                _ReadBytes = await Stream.ReadAsync(buffer, 0, buffer.Length, token)
                                          .ConfigureAwait(false);
 
                 if (_ReadBytes > 0)
