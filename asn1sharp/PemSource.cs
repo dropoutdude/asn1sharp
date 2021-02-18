@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace asn1sharp
@@ -65,12 +66,14 @@ namespace asn1sharp
             return !_Reader.EndOfStream;
         }
 
-        protected override async Task<ReaderChunk> OnNextChunk()
+        protected override async Task<ReaderChunk> OnNextChunk(CancellationToken token)
         {
             var chunk = ReaderChunk.Empty;
 
             if (!_Reader.EndOfStream)
             {
+                token.ThrowIfCancellationRequested();
+
                 var line = await _Reader.ReadLineAsync().ConfigureAwait(false);
 
                 if (!(Regex.IsMatch(line, StartPattern) || Regex.IsMatch(line, EndPattern)))

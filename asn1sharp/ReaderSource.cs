@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace asn1sharp
@@ -30,12 +31,14 @@ namespace asn1sharp
 
         #region Methods
 
-        public Task<ReaderChunk> NextChunk()
+        public Task<ReaderChunk> NextChunk(CancellationToken token)
         {
-            return OnNextChunk();
+            token.ThrowIfCancellationRequested();
+
+            return OnNextChunk(token);
         }
 
-        protected abstract Task<ReaderChunk> OnNextChunk();
+        protected abstract Task<ReaderChunk> OnNextChunk(CancellationToken token);
 
         public abstract bool HasNextChunk();
 
